@@ -26,7 +26,8 @@ group :development do
 end
 
 group :test do
-
+  gem 'webmock'
+  gem 'vcr'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
