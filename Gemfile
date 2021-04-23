@@ -18,6 +18,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'fast_jsonapi'
   gem 'faraday'
+  gem 'figaro'
 end
 
 group :development do
