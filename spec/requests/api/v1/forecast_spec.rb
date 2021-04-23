@@ -4,12 +4,14 @@ RSpec.describe 'Forecast API' do
 
   describe 'happy path' do
     before :each do
-      get api_v1_forecast_path, params: { location: 'Denver,CO'}
+      VCR.use_cassette('forecast_api') do
+        get api_v1_forecast_path(location: 'denver,co')
       # test for location not having a city
       # test for location not having a state
       # test for location not having a comma between city and state
 
-      @result = JSON.parse(response.body, symbolize_names: true)
+        @result = JSON.parse(response.body, symbolize_names: true)
+      end
     end
 
     it 'has a successful response' do
@@ -17,7 +19,7 @@ RSpec.describe 'Forecast API' do
       expect(response).to be_successful
     end
 
-    xit 'outputs the correct initial keys' do
+    it 'outputs the correct initial keys' do
       expect(@result).to have_key(:data)
 
       data = @result[:data]
@@ -27,7 +29,7 @@ RSpec.describe 'Forecast API' do
       expect(data).to have_key(:attributes)
     end
 
-    xit 'attributes outputs the correct keys' do
+    it 'attributes outputs the correct keys' do
       attributes = @result[:data][:attributes]
 
       expect(attributes).to have_key(:current_weather)
@@ -35,8 +37,8 @@ RSpec.describe 'Forecast API' do
       expect(attributes).to have_key(:hourly_weather)
     end
 
-    xit 'current weather outputs the right attributes' do
-      current_weather = @result[:date][:attributes][:current_weather]
+    it 'current weather outputs the right attributes' do
+      current_weather = @result[:data][:attributes][:current_weather]
 
       expect(current_weather).to have_key(:datetime)
       expect(current_weather).to have_key(:sunrise)
@@ -50,14 +52,14 @@ RSpec.describe 'Forecast API' do
       expect(current_weather).to have_key(:icon)
     end
 
-    xit 'daily weather outputs 5 days only' do
-      daily_weather = @result[:date][:attributes][:daily_weather]
+    it 'daily weather outputs 5 days only' do
+      daily_weather = @result[:data][:attributes][:daily_weather]
 
       expect(daily_weather.length).to eq(5)
     end
 
-    xit 'daily weather outputs the right attributes' do
-      daily_weather = @result[:date][:attributes][:daily_weather]
+    it 'daily weather outputs the right attributes' do
+      daily_weather = @result[:data][:attributes][:daily_weather]
 
       daily_weather.each do |day|
         expect(day).to have_key(:date)
@@ -70,20 +72,20 @@ RSpec.describe 'Forecast API' do
       end
     end
 
-    xit 'hourly weather outputs 8 hours only' do
-      hourly_weather = @result[:date][:attributes][:hourly_weather]
+    it 'hourly weather outputs 8 hours only' do
+      hourly_weather = @result[:data][:attributes][:hourly_weather]
 
       expect(hourly_weather.length).to eq(8)
     end
 
-    xit 'hourly weather outputs the right attributes' do
-      hourly_weather = @result[:date][:attributes][:hourly_weather]
+    it 'hourly weather outputs the right attributes' do
+      hourly_weather = @result[:data][:attributes][:hourly_weather]
 
       hourly_weather.each do |hour|
-        expect(hour).to have_hey(:time)
-        expect(hour).to have_hey(:temperature)
-        expect(hour).to have_hey(:conditions)
-        expect(hour).to have_hey(:icon)
+        expect(hour).to have_key(:time)
+        expect(hour).to have_key(:temperature)
+        expect(hour).to have_key(:conditions)
+        expect(hour).to have_key(:icon)
       end
     end
   end
