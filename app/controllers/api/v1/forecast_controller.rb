@@ -55,7 +55,7 @@ class Api::V1::ForecastController < ApplicationController
                       sunset: Time.at(day[:sunset]),
                       max_temp: day[:temp][:max],
                       min_temp: day[:temp][:min],
-                      conditions: day[:weather].first[:conditions],
+                      conditions: day[:weather].first[:description],
                       icon: day[:weather].first[:icon]
                       ).as_json['table']
     end
