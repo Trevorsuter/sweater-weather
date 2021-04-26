@@ -3,13 +3,6 @@ require 'rails_helper'
 RSpec.describe SalariesFacade do
 
   describe 'happy path' do
-    it 'can request salary data and parse the info' do
-      request = SalariesFacade.get_salary_data("denver")
-      result = JSON.parse(request.body, symbolize_names: true)
-
-      expect(request.status).to eq(200)
-      expect(result[:_links][:self][:href]).to eq("https://api.teleport.org/api/urban_areas/slug:denver/salaries/")
-    end
 
     it 'can get the current weather data' do
       request = SalariesFacade.get_weather_data("denver")
@@ -24,23 +17,6 @@ RSpec.describe SalariesFacade do
       expect(request).to have_key('visibility')
       expect(request).to have_key('conditions')
       expect(request).to have_key('icon')
-    end
-
-    it 'can find the correct jobs' do
-      jobs = ["data analyst", 
-              "data scientist", 
-              "mobile developer", 
-              "qa engineer", 
-              "software engineer", 
-              "systems administrator", 
-              "web developer"]
-      output = SalariesFacade.correct_jobs("denver")
-
-      incorrect_job = output.find_all do |job|
-        !jobs.include?(job[:job][:title].downcase)
-      end
-      
-      expect(incorrect_job.length).to eq(0)
     end
 
     it 'can format the correct jobs' do
