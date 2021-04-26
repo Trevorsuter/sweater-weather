@@ -89,4 +89,7 @@ RSpec.describe 'salaries API' do
       expect(incorrect_job.length).to eq(0)
     end
   end
+  
+  it 'will take spaces and convert them to dashes in the parameters' do
+  end
 end

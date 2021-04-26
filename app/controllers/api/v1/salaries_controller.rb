@@ -1,7 +1,7 @@
 class Api::V1::SalariesController < ApplicationController
 
   def index
-    teleport_response = Faraday.get("https://api.teleport.org/api/urban_areas/slug:#{params[:destination]}/salaries")
+    teleport_response = SalariesFacade.get_salary_data(params[:destination])
     coordinates = MapquestFacade.get_coordinates(params[:destination])
     current_weather = OpenweatherFacade.current(coordinates.latitude, coordinates.longitude)
     result = JSON.parse(teleport_response.body, symbolize_names: true)
