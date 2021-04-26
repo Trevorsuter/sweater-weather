@@ -29,6 +29,22 @@ RSpec.describe BackgroundsFacade do
         expect(image).to have_key(:hostPageUrl)
       end
     end
+
+    it 'can format the image for json output' do
+      VCR.use_cassette('backgrounds_facade') do
+        image = BackgroundsFacade.image("denver,co")
+
+        expect(image).to be_a(Hash)
+        expect(image).to have_key('location')
+        expect(image).to have_key('search_url')
+        expect(image).to have_key('image_url')
+        expect(image).to have_key('credit')
+
+        expect(image['credit']).to have_key('name')
+        expect(image['credit']).to have_key('source')
+        expect(image['credit']).to have_key('logo')
+      end
+    end
   end
 
 end

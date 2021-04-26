@@ -15,4 +15,20 @@ class BackgroundsFacade
     parsed[:value].first
   end
 
+  def self.image(location)
+    image = first_image(location)
+
+    OpenStruct.new(location: location,
+                  search_url: image[:webSearchUrl],
+                  image_url: image[:contentUrl],
+                  credit: {name: image[:name],
+                  source: image[:hostPageUrl],
+                  logo: image[:hostPageFavIconUrl]}
+                  ).as_json['table']
+  end
+
+  def self.formatted_image(location)
+    OpenStruct.new(image: image(location))
+  end
+
 end
