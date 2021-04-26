@@ -1,3 +1,4 @@
+# This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
 SimpleCov.start
 
@@ -26,6 +27,11 @@ require 'rspec/rails'
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+end
+
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
@@ -35,7 +41,7 @@ end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
-
+  config.include FactoryBot::Syntax::Methods
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -70,3 +76,4 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
