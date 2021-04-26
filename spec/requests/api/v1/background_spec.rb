@@ -25,11 +25,12 @@ RSpec.describe 'backgrounds API' do
 
       expect(@result[:data][:attributes]).to have_key(:image)
       expect(@result[:data][:attributes][:image]).to have_key(:location)
+      expect(@result[:data][:attributes][:image]).to have_key(:search_url)
       expect(@result[:data][:attributes][:image]).to have_key(:image_url)
       expect(@result[:data][:attributes][:image]).to have_key(:credit)
 
       expect(@result[:data][:attributes][:image][:credit]).to have_key(:source)
-      expect(@result[:data][:attributes][:image][:credit]).to have_key(:author)
+      expect(@result[:data][:attributes][:image][:credit]).to have_key(:name)
       expect(@result[:data][:attributes][:image][:credit]).to have_key(:logo)
     end
   end
