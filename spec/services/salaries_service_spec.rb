@@ -36,4 +36,16 @@ RSpec.describe SalariesService do
       expect(incorrect_job.length).to eq(0)
     end
   end
+
+  it 'can format the correct jobs' do
+    output = SalariesService.format_jobs("denver")
+
+    expect(output.length).to be <= 7
+
+    output.each do |job|
+      expect(job).to have_key('title')
+      expect(job).to have_key('min')
+      expect(job).to have_key('max')
+    end
+  end
 end

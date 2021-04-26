@@ -1,7 +1,7 @@
 class Api::V1::SalariesController < ApplicationController
 
   def index
-    jobs = SalariesFacade.format_jobs(params[:destination])
+    jobs = SalariesService.format_jobs(params[:destination])
     current_weather = SalariesFacade.get_weather_data(params[:destination])
 
     render json: formatted_output(current_weather, jobs)

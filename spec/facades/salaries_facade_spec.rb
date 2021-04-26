@@ -18,17 +18,5 @@ RSpec.describe SalariesFacade do
       expect(request).to have_key('conditions')
       expect(request).to have_key('icon')
     end
-
-    it 'can format the correct jobs' do
-      output = SalariesFacade.format_jobs("denver")
-
-      expect(output.length).to be <= 7
-
-      output.each do |job|
-        expect(job).to have_key('title')
-        expect(job).to have_key('min')
-        expect(job).to have_key('max')
-      end
-    end
   end
 end
