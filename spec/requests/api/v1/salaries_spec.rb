@@ -23,7 +23,7 @@ RSpec.describe 'salaries API' do
       expect(@result[:data]).to have_key[:attributes]
     end
 
-    it 'outputs the right destination' do
+    xit 'outputs the right destination' do
       attributes = @result[:data][:attributes]
 
       expect(attributes).to have_key(:destination)
@@ -34,7 +34,7 @@ RSpec.describe 'salaries API' do
       expect(attributes[:forecast]).to have_key(:temperature)
     end
 
-    it 'outputs the forecast for that destination' do
+    xit 'outputs the forecast for that destination' do
       attributes = @result[:data][:attributes]
 
       expect(attributes).to have_key(:forecast)
@@ -42,14 +42,14 @@ RSpec.describe 'salaries API' do
       expect(attributes[:forecast]).to have_key(:temperature)
     end
 
-    it 'outputs the salaries of certain jobs' do
+    xit 'outputs the salaries of certain jobs' do
       attributes = @result[:data][:attributes]
 
       expect(attributes).to have_key(:salaries)
       expect(attributes[:salaries]).to be_an(Array)
     end
 
-    it 'only outputs a total of 7 jobs' do
+    xit 'only outputs a total of 7 jobs' do
       salaries = @results[:data][:attributes][:salaries]
 
       expect(salaries.length).to be <= 7
