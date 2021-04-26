@@ -7,4 +7,13 @@ class MapquestService
   def self.parse_data(location)
     JSON.parse(request(location).body, symbolize_names: true)
   end
+
+  def self.coordinates(location)
+    data = parse_data(location)
+
+    latitude = data[:results].first[:locations].first[:latLng][:lat]
+    longitude = data[:results].first[:locations].first[:latLng][:lng]
+
+    OpenStruct.new(latitude: latitude, longitude: longitude)
+  end
 end

@@ -19,8 +19,14 @@ RSpec.describe MapquestService do
       end
     end
 
-    it 'can create a poro for the location' do
-      
+    it 'can create an openstruct for the location' do
+      VCR.use_cassette('mapquest_service') do
+        data = MapquestService.coordinates("denver,co")
+
+        expect(data).to be_an(OpenStruct)
+        expect(data.latitude).to eq(39.738453)
+        expect(data.longitude).to eq(-104.984853)
+      end
     end
   end
 end
