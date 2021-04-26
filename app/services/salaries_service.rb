@@ -20,8 +20,8 @@ class SalariesService
     data = find_correct_jobs(destination)
     data.map do |d|
       OpenStruct.new(title: d[:job][:title],
-                    min: d[:salary_percentiles][:percentile_25],
-                    max: d[:salary_percentiles][:percentile_75]
+                    min: d[:salary_percentiles][:percentile_25].round(2),
+                    max: d[:salary_percentiles][:percentile_75].round(2)
                     ).as_json['table']
     end
   end
