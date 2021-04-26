@@ -1,10 +1,7 @@
 class Api::V1::BackgroundsController < ApplicationController
 
   def index
-    location = params[:location].gsub(",", "+")
-    request = Faraday.get("https://api.bing.microsoft.com/v7.0/images/search?q=#{location}+downtown") do |conn|
-      conn.headers['Ocp-Apim-Subscription-Key'] = ENV['BING_IMAGE_SEARCH_KEY']
-    end
+    request = BackgroundsFacade.get_backgrounds(params[:location])
     parsed = JSON.parse(request.body, symbolize_names: true)
     image = parsed[:value].first
     formatted_image = formatted_image(image)
