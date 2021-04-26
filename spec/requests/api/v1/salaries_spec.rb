@@ -49,14 +49,44 @@ RSpec.describe 'salaries API' do
       expect(attributes[:salaries]).to be_an(Array)
     end
 
+    it 'outputs the correct data per job' do
+      salaries = @result[:data][:attributes][:salaries]
+
+      salaries.each do |job|
+        expect(job).to have_key(:title)
+        expect(job[:title]).to be_a(String)
+
+        expect(job).to have_key(:min)
+        expect(job[:min]).to be_a(Float)
+
+        expect(job).to have_key(:max)
+        expect(job[:max]).to be_a(Float)
+
+        expect(job[:max]).to be > (job[:min])
+      end
+    end
+
     it 'only outputs a total of 7 jobs' do
       salaries = @result[:data][:attributes][:salaries]
 
       expect(salaries.length).to be <= 7
     end
 
-    xit 'only includes the correct jobs' do
+    it 'only includes the correct jobs' do
+      jobs = ["data analyst", 
+              "data scientist", 
+              "mobile developer", 
+              "qa engineer", 
+              "software engineer", 
+              "systems administrator", 
+              "web developer"]
+      salaries = @result[:data][:attributes][:salaries]
 
+      incorrect_job = salaries.find_all do |incorrect_job|
+        !jobs.include?(incorrect_job[:title].downcase)
+      end
+      
+      expect(incorrect_job.length).to eq(0)
     end
   end
 end
