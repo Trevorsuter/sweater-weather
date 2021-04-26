@@ -10,5 +10,37 @@ RSpec.describe SalariesFacade do
       expect(request.status).to eq(200)
       expect(result[:_links][:self][:href]).to eq("https://api.teleport.org/api/urban_areas/slug:denver/salaries/")
     end
+
+    it 'can get the current weather data' do
+      request = SalariesFacade.get_weather_data("denver")
+
+      expect(request).to have_key('datetime')
+      expect(request).to have_key('sunrise')
+      expect(request).to have_key('sunset')
+      expect(request).to have_key('temperature')
+      expect(request).to have_key('feels_like')
+      expect(request).to have_key('humidity')
+      expect(request).to have_key('uvi')
+      expect(request).to have_key('visibility')
+      expect(request).to have_key('conditions')
+      expect(request).to have_key('icon')
+    end
+
+    it 'can find the correct jobs' do
+      jobs = ["data analyst", 
+              "data scientist", 
+              "mobile developer", 
+              "qa engineer", 
+              "software engineer", 
+              "systems administrator", 
+              "web developer"]
+      output = SalariesFacade.correct_jobs("denver")
+
+      incorrect_job = output.find_all do |job|
+        !jobs.include?(job[:job][:title].downcase)
+      end
+      
+      expect(incorrect_job.length).to eq(0)
+    end
   end
 end
