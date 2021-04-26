@@ -1,24 +1,6 @@
 class Api::V1::SalariesController < ApplicationController
 
   def index
-    jobs = SalariesService.format_jobs(params[:destination])
-    current_weather = SalariesFacade.get_weather_data(params[:destination])
-
-    render json: formatted_output(current_weather, jobs)
-  end
-
-  def formatted_output(forecast, salaries)
-    { data: {
-        id: nil,
-        type: "salaries",
-        attributes: {
-          destination: params[:destination],
-          forecast: {
-            summary: forecast['conditions'],
-            temperature: forecast['temperature']
-          },
-          salaries: salaries
-        } 
-    }}.to_json
+    render json: SalariesSerializer.new(SalariesFacade.generate_combined_data(params[:destination]))
   end
 end
