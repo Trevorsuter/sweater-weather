@@ -1,11 +1,9 @@
 class Api::V1::ForecastController < ApplicationController
   def index
     coordinates = MapquestFacade.get_coordinates(params[:location])
-    current = OpenweatherFacade.current(coordinates.latitude, coordinates.longitude)
-    daily = OpenweatherFacade.daily(coordinates.latitude, coordinates.longitude)
-    hourly = OpenweatherFacade.hourly(coordinates.latitude, coordinates.longitude)
+    weather = OpenweatherFacade.data(coordinates.latitude, coordinates.longitude)
 
-    render json: forecast_output(current, daily, hourly)
+    render json: forecast_output(weather.current, weather.daily, weather.hourly)
   end
 
   private

@@ -6,6 +6,7 @@ class OpenweatherFacade
 
   def self.current(latitude, longitude)
     data = JSON.parse(request_data(latitude, longitude).body, symbolize_names: true)[:current]
+
     OpenStruct.new(datetime: Time.at(data[:dt]),
                     sunrise: Time.at(data[:sunrise]),
                     sunset: Time.at(data[:sunset]),
@@ -44,5 +45,12 @@ class OpenweatherFacade
                       icon: hour[:weather].first[:icon]
                       ).as_json['table']
     end
+  end
+
+  def self.data(latitude, longitude)
+    OpenStruct.new(current: current(latitude, longitude),
+                  daily: daily(latitude, longitude),
+                  hourly: hourly(latitude, longitude)
+                  )
   end
 end

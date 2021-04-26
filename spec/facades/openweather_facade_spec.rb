@@ -28,7 +28,7 @@ RSpec.describe OpenweatherFacade do
         expect(current['temperature']).to be_a(Float)
         expect(current['feels_like']).to be_a(Float)
         expect(current['humidity']).to be_an(Integer)
-        expect(current['uvi']).to be_a(Float)
+        expect(current['uvi']).to be_an(Integer)
         expect(current['visibility']).to be_an(Integer)
         expect(current['conditions']).to be_a(String)
         expect(current['icon']).to be_a(String)
@@ -64,6 +64,40 @@ RSpec.describe OpenweatherFacade do
           expect(hour['temperature']).to be_a(Float)
           expect(hour['conditions']).to be_a(String)
           expect(hour['icon']).to be_a(String)
+        end
+      end
+    end
+
+    it 'can combine all of the info' do
+      VCR.use_cassette('combine_openweather_facade') do
+        data = OpenweatherFacade.data(@latitude, @longitude)
+
+        expect(data.current).to have_key('datetime')
+        expect(data.current).to have_key('sunrise')
+        expect(data.current).to have_key('sunset')
+        expect(data.current).to have_key('temperature')
+        expect(data.current).to have_key('feels_like')
+        expect(data.current).to have_key('humidity')
+        expect(data.current).to have_key('uvi')
+        expect(data.current).to have_key('visibility')
+        expect(data.current).to have_key('conditions')
+        expect(data.current).to have_key('icon')
+
+        data.daily.each do |day|
+          expect(day).to have_key('date')
+          expect(day).to have_key('sunrise')
+          expect(day).to have_key('sunset')
+          expect(day).to have_key('max_temp')
+          expect(day).to have_key('min_temp')
+          expect(day).to have_key('conditions')
+          expect(day).to have_key('icon')
+        end
+        
+        data.hourly.each do |hour|
+          expect(hour).to have_key('time')
+          expect(hour).to have_key('temperature')
+          expect(hour).to have_key('conditions')
+          expect(hour).to have_key('icon')
         end
       end
     end
