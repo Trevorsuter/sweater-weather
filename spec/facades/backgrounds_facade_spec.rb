@@ -14,6 +14,21 @@ RSpec.describe BackgroundsFacade do
         expect(request.status).to eq(200)
       end
     end
+
+    it 'can get the first image from the search' do
+      VCR.use_cassette('backgrounds_facade') do
+        image = BackgroundsFacade.first_image("denver,co")
+
+        expect(image).to be_a(Hash)
+        expect(image).to_not be_an(Array)
+
+        expect(image).to have_key(:webSearchUrl)
+        expect(image).to have_key(:contentUrl)
+        expect(image).to have_key(:name)
+        expect(image).to have_key(:hostPageFavIconUrl)
+        expect(image).to have_key(:hostPageUrl)
+      end
+    end
   end
 
 end

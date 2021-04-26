@@ -1,9 +1,7 @@
 class Api::V1::BackgroundsController < ApplicationController
 
   def index
-    request = BackgroundsFacade.get_backgrounds(params[:location])
-    parsed = JSON.parse(request.body, symbolize_names: true)
-    image = parsed[:value].first
+    image = BackgroundsFacade.first_image(params[:location])
     formatted_image = formatted_image(image)
 
     render json: formatted_output(formatted_image)
