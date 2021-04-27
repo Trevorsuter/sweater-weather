@@ -68,7 +68,7 @@ RSpec testing suite is utilized for testing this application.
 >           "conditions": "overcast clouds",
 >           "icon": "04d"
 >         },
->         {...}(total of 5 daily records like shown above)
+>         {"..."}
 >       ],
 >       "current_weather": [
 >         {
@@ -77,7 +77,7 @@ RSpec testing suite is utilized for testing this application.
 >           "conditions": "overcast clouds",
 >           "icon": "04d"
 >         },
->         {...}(total of 8 hourly records like shown above)
+>         {"..."}
 >       ]
 >     }
 >    }
@@ -98,18 +98,18 @@ RSpec testing suite is utilized for testing this application.
 `GET api/v1/backgrounds?location=denver,co`
 >```JSON
 > {
->   data: {
+>   "data": {
 >     "id": "null",
 >     "type": "image",
 >     "attributes": {
 >       "image": {
 >         "location": "denver,co",
->         "search_url": {search_url},
->         "image_url": {image_url},
+>         "search_url": {"search_url"},
+>         "image_url": {"image_url"},
 >         "credit": {
->           "name": {image name},
->           "source": {image source},
->           "logo": {source logo}
+>           "name": {"image name"},
+>           "source": {"image source"},
+>           "logo": {"source logo"}
 >         } 
 >       }
 >     }
