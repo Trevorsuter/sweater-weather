@@ -41,7 +41,7 @@ RSpec.describe 'User Create API' do
       expect(result[:data][:attributes][:email]).to eq(@user.email)
       
       expect(result[:data][:attributes]).to have_key(:api_key)
-      expect(result[:data][:attributes][:api_key]).to eq(@user.password_digest)
+      expect(result[:data][:attributes][:api_key]).to eq(@user.api_key)
     end
   end
 
