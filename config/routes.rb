@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get 'backgrounds', to: 'backgrounds#index', as: 'backgrounds'
       post 'users', to: 'users#create', as: 'users'
       post 'sessions', to: 'sessions#create', as: 'sessions'
+      post 'roadtrip', to: 'roadtrip#create', as: 'roadtrip'
     end
   end
 end
