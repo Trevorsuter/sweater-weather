@@ -7,7 +7,7 @@ RSpec.describe 'User Create API' do
       body = {email: "example@email.com",
               password: "testpassword",
               password_confirmation: "testpassword"}.as_json
-      post api_v1_users_path(headers: headers, params: body)
+      post api_v1_users_path(headers: headers, params: body, as: :json)
 
       @user = User.where(email: "example@email.com").first
     end
