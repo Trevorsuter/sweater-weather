@@ -1,35 +1,14 @@
 class RoadtripFacade
 
-  def self.raw_trip_data(origin, destination)
-    Faraday.get("http://www.mapquestapi.com/directions/v2/route?key=#{ENV['MAPQUEST_KEY']}&from=#{origin}&to=#{destination}")
-  end
-
-  def self.trip_data(origin, destination)
-    JSON.parse(raw_trip_data(origin, destination).body, symbolize_names: true)
-  end
-
   def self.weather_data(origin, destination)
-    latitude = trip_info(origin, destination).arrival_latitude
-    longitude = trip_info(origin, destination).arrival_longitude
+    latitude = RoadtripService.data(origin, destination).arrival_latitude
+    longitude = RoadtripService.data(origin, destination).arrival_longitude
 
     OpenweatherService.parse_data(latitude, longitude)
   end
-  
-  def self.trip_info(origin, destination)
-    route = trip_data(origin, destination)[:route]
-    OpenStruct.new(
-      start_city: origin,
-      end_city: destination,
-      travel_time: route[:formattedTime],
-      raw_travel_time: route[:time],
-      arrival_time: Time.now + route[:time],
-      arrival_latitude: route[:locations].last[:displayLatLng][:lat],
-      arrival_longitude: route[:locations].last[:displayLatLng][:lng]
-    )
-  end
 
   def self.forecast_data(origin, destination)
-    trip_info = trip_info(origin, destination)
+    trip_info = RoadtripService.data(origin, destination)
     weather_data = weather_data(origin, destination)
     if trip_info.raw_travel_time > 172800
       find_daily_forecast(weather_data[:daily], trip_info.arrival_time)
@@ -70,7 +49,7 @@ class RoadtripFacade
   end
 
   def self.data(origin, destination)
-    trip_info = trip_info(origin, destination)
+    trip_info = RoadtripService.data(origin, destination)
     weather_info = weather_at_eta(origin, destination)
 
     OpenStruct.new(start_city: trip_info.start_city,
@@ -81,5 +60,10 @@ class RoadtripFacade
                     conditions: weather_info.conditions
                     }  
                   )
+  end
+
+  def self.bad_trip(origin, destination)
+    RoadtripService.parsed_data(origin, destination)[:info][:messages].first
+    
   end
 end

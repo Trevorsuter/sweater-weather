@@ -79,5 +79,43 @@ RSpec.describe 'Roadtrip API' do
       expect(response.status).to eq(401)
       expect(result).to eq("API key is invalid.")
     end
+
+    it 'will return an error if the trip is impossible' do
+      VCR.use_cassette('bad_trip') do
+        user = User.create(email: "example@email.com", password: "password")
+    
+        headers = { 'CONTENT_TYPE' => 'application/json'}
+        body = {
+                origin: "Denver,CO",
+                destination: "London, UK",
+                api_key: "#{user.api_key}"
+                }.as_json
+        
+        post api_v1_roadtrip_path(headers: headers, params: body, as: :json)
+        result = JSON.parse(response.body)
+
+        expect(result).to eq("This trip is impossible, unless your ride is super duper special...")
+        expect(response.status).to eq(401)
+      end
+    end
+
+    it 'will return an error if mapquest cant read the destinations correctly' do
+      VCR.use_cassette('bad_trip_2') do
+        user = User.create(email: "example@email.com", password: "password")
+    
+        headers = { 'CONTENT_TYPE' => 'application/json'}
+        body = {
+                origin: "Denver,CO",
+                destination: "Alaska,US",
+                api_key: "#{user.api_key}"
+                }.as_json
+        
+        post api_v1_roadtrip_path(headers: headers, params: body, as: :json)
+        result = JSON.parse(response.body)
+
+        expect(result).to eq("We had an error with one of your given locations. Try being more specific, or using the nearest city.")
+        expect(response.status).to eq(401)
+      end
+    end
   end
 end
