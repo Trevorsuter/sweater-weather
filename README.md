@@ -117,7 +117,7 @@ RSpec testing suite is utilized for testing this application.
 > }
 
 - _**Notes about this endpoint:**_
-  - *All images default to searching for pictures of that citie's Downtown area*.
+  - *All images default to searching for pictures of that city's Downtown area*.
 ***
 
 #### POST User Data
@@ -174,7 +174,7 @@ Please follow the steps below and know that all contributions you make are **gre
 - Rails 5.2.5
 - Ruby 2.5.3
 - RSpec 3.10.0
-- Rbev 1.1.2
+- Rbenv 1.1.2
 
 ## Author
 - **Trevor Suter**
