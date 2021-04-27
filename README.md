@@ -87,7 +87,7 @@ RSpec testing suite is utilized for testing this application.
   - `daily_weather` *returns a total of 5 days of data*
   - `hourly_weather` *returns a total of 8 hours of data*
   - *all units of measurement are in imperial form*
-
+***
 
 #### GET Background Data
 `GET /api/v1/backgrounds?location={city,state}`
@@ -118,14 +118,41 @@ RSpec testing suite is utilized for testing this application.
 
 - _**Notes about this endpoint:**_
   - *All images default to searching for pictures of that citie's Downtown area*.
-
+***
 
 #### POST User Data
 `POST api/v1/users`
+
 `request_body: {email: (email), password: (password), password_confirmation: (password confirmation)}`
 
-- **NO PATH PARAMS ARE USED IN THIS ENDPOINT, all data must be passed through in the body of the request in the format shown above.**
+- **NO PATH PARAMS ARE USED IN THIS ENDPOINT, all data must be passed through in the body of the request in JSON format shown above.**
 
+- **Required** in the body:
+  - `email`
+  - `password`
+  - `password confirmation` *must match the password for successful creation*
+
+`POST api/v1/users`
+
+`request_body: {"email": "example@email.com", password: "password", password_confirmation: "password"}`
+
+> ```JSON
+> {
+>   "data": {
+>     "id": 1,
+>     "type": "user",
+>     "attributes": {
+>       "email": "example@email.com",
+>       "api_key": "g46k7791m07za88140"
+>     }
+>   }
+> }
+
+- _**Notes about this endpoint:**_
+  - *201 status code if creation is successful*
+  - *401 status code with description if unsuccessful*
+
+***
 
 ## Built With
 
