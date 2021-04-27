@@ -33,6 +33,100 @@ RSpec testing suite is utilized for testing this application.
 
 ## Endpoints
 
+#### GET Forecast Data
+`GET /api/v1/forecast?location={city,state}`
+
+- **Required** path params:
+  - `location`: MUST be in *city,state* format
+
+> `GET /api/v1/forecast?location=denver,co`
+> ```JSON
+> {
+>   "data": {
+>     "id": "null",
+>     "type": "forecast",
+>     "attributes": {
+>       "current_weather": {
+>         "datetime": "2021-04-26T18:20:06.000-06:00",
+>         "sunrise": "2021-04-26T06:06:18.000-06:00",
+>         "sunset": "2021-04-26T19:48:45.000-06:00",
+>         "temperature": 71.96,
+>         "feels_like": 69.19,
+>         "humidity": 7,
+>         "uvi": 0.62,
+>         "visibility": 10000,
+>         "conditions": "overcast clouds",
+>         "icon": "04d"
+>       },
+>       "daily_weather": [
+>         {
+>           "date": "2021-04-26",
+>           "sunrise": "2021-04-26T06:06:18.000-06:00",
+>           "sunset": "2021-04-26T19:48:45.000-06:00",
+>           "max_temp": 75.27,
+>           "min_temp": 52.65,
+>           "conditions": "overcast clouds",
+>           "icon": "04d"
+>         },
+>         {...}(total of 5 daily records like shown above)
+>       ],
+>       "current_weather": [
+>         {
+>           "time": "18:00:00",
+>           "temperature": 71.96,
+>           "conditions": "overcast clouds",
+>           "icon": "04d"
+>         },
+>         {...}(total of 8 hourly records like shown above)
+>       ]
+>     }
+>    }
+
+
+- _**Notes about this endpoint:**_
+  - `daily_weather` *returns a total of 5 days of data*
+  - `hourly_weather` *returns a total of 8 hours of data*
+  - *all units of measurement are in imperial form*
+
+
+#### GET Background Data
+`GET /api/v1/backgrounds?location={city,state}`
+
+- **Required** path params:
+  - `location`: Must be in *city,state* format
+
+`GET api/v1/backgrounds?location=denver,co`
+>```JSON
+> {
+>   data: {
+>     "id": "null",
+>     "type": "image",
+>     "attributes": {
+>       "image": {
+>         "location": "denver,co",
+>         "search_url": {search_url},
+>         "image_url": {image_url},
+>         "credit": {
+>           "name": {image name},
+>           "source": {image source},
+>           "logo": {source logo}
+>         } 
+>       }
+>     }
+>   }
+> }
+
+- _**Notes about this endpoint:**_
+  - *All images default to searching for pictures of that citie's Downtown area*.
+
+
+#### POST User Data
+`POST api/v1/users`
+`request_body: {email: (email), password: (password), password_confirmation: (password confirmation)}`
+
+- **NO PATH PARAMS ARE USED IN THIS ENDPOINT, all data must be passed through in the body of the request in the format shown above.**
+
+
 ## Built With
 
 - [Ruby](https://www.ruby-lang.org/en/)
