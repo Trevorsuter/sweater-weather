@@ -7,5 +7,6 @@ class User < ApplicationRecord
 
   def create_api_key
     self.api_key = SecureRandom.hex
+    self.save
   end
 end
