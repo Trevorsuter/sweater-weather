@@ -2,9 +2,13 @@ require 'rails_helper'
 
 RSpec.describe OpenweatherService do
   describe 'happy path' do
+    before :each do
+      @latitude = 39.738453
+      @longitude = -104.984853
+    end
     it 'can make a successful request' do
       VCR.use_cassette('openweather_service') do
-        request = OpenweatherService.get_data("denver,co")
+        request = OpenweatherService.get_data(@latitude, @longitude)
 
         expect(request.status).to eq(200)
       end
@@ -12,10 +16,10 @@ RSpec.describe OpenweatherService do
 
     it 'can separate the current, daily, and hourly weather data' do
       VCR.use_cassette('openweather_service_compare') do
-        all_data = JSON.parse(OpenweatherService.get_data("denver,co").body, symbolize_names: true)
-        current_data = OpenweatherService.current_weather_data("denver,co")
-        hourly_data = OpenweatherService.hourly_weather_data("denver,co")
-        daily_data = OpenweatherService.daily_weather_data("denver,co")
+        all_data = JSON.parse(OpenweatherService.get_data(@latitude, @longitude).body, symbolize_names: true)
+        current_data = OpenweatherService.current_weather_data(@latitude, @longitude)
+        hourly_data = OpenweatherService.hourly_weather_data(@latitude, @longitude)
+        daily_data = OpenweatherService.daily_weather_data(@latitude, @longitude)
 
         expect(all_data[:current]).to eq(current_data)
         expect(all_data[:daily][0..4]).to eq(daily_data)
@@ -25,7 +29,7 @@ RSpec.describe OpenweatherService do
 
     it 'can format current weather correctly' do
       VCR.use_cassette('openweather_service') do
-        current = OpenweatherService.current_weather("denver,co")
+        current = OpenweatherService.current_weather(@latitude, @longitude)
   
         expect(current).to be_a(Hash)
         expect(current['datetime']).to be_a(String)
@@ -43,7 +47,7 @@ RSpec.describe OpenweatherService do
 
     it 'only gives 5 days of daily weather' do
       VCR.use_cassette('openweather_service') do
-        daily = OpenweatherService.daily_weather_data("denver,co")
+        daily = OpenweatherService.daily_weather_data(@latitude, @longitude)
 
         expect(daily.length).to eq(5)
       end
@@ -51,7 +55,7 @@ RSpec.describe OpenweatherService do
 
     it 'can format daily weather correctly' do
       VCR.use_cassette('openweather_service') do
-        daily = OpenweatherService.daily_weather("denver,co")
+        daily = OpenweatherService.daily_weather(@latitude, @longitude)
 
         daily.each do |day|
           expect(day['date']).to be_a(String)
@@ -67,7 +71,7 @@ RSpec.describe OpenweatherService do
 
     it 'only gives 8 hours of hourly weather data' do
       VCR.use_cassette('openweather_service') do
-        hourly = OpenweatherService.hourly_weather_data("denver,co")
+        hourly = OpenweatherService.hourly_weather_data(@latitude, @longitude)
 
         expect(hourly.length).to eq(8)
       end
@@ -75,7 +79,7 @@ RSpec.describe OpenweatherService do
 
     it 'can format hourly weather correctly' do
       VCR.use_cassette('openweather_service') do
-        hourly = OpenweatherService.hourly_weather("denver,co")
+        hourly = OpenweatherService.hourly_weather(@latitude, @longitude)
 
         hourly.each do |hour|
           expect(hour['time']).to be_a(String)
@@ -88,7 +92,7 @@ RSpec.describe OpenweatherService do
 
     it 'can combine all three versions of weather data into one ostruct' do
       VCR.use_cassette('openweather_service_all') do
-        data = OpenweatherService.all_weather("denver,co")
+        data = OpenweatherService.all_weather(@latitude, @longitude)
 
         expect(data.current_weather).to have_key('datetime')
         expect(data.current_weather).to have_key('sunrise')
