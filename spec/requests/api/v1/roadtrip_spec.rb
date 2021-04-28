@@ -62,7 +62,7 @@ RSpec.describe 'Roadtrip API' do
       result = JSON.parse(response.body, symbolize_names: true)
 
       expect(response.status).to eq(401)
-      expect(result).to eq("You must provide an API key.")
+      expect(result).to eq("You're missing some parameters.")
     end
 
     it 'will return an error if api key is not found' do
@@ -116,6 +116,39 @@ RSpec.describe 'Roadtrip API' do
         expect(result).to eq("We had an error with one of your given locations. Try being more specific, or using the nearest city.")
         expect(response.status).to eq(401)
       end
+    end
+
+    it 'will return an error if origin is not given' do
+      user = User.create(email: "example@email.com", password: "password")
+    
+      headers = { 'CONTENT_TYPE' => 'application/json'}
+      body = {
+              destination: "London, UK",
+              api_key: "#{user.api_key}"
+              }.as_json
+      
+      post api_v1_roadtrip_path(headers: headers, params: body, as: :json)
+      result = JSON.parse(response.body)
+
+      expect(response.status).to eq(401)
+      expect(result).to eq("You're missing some parameters.")
+    end
+
+    it 'will return an error if destination is not given' do
+      user = User.create(email: "example@email.com", password: "password")
+    
+      headers = { 'CONTENT_TYPE' => 'application/json'}
+      body = {
+              origin: "London, UK",
+              api_key: "#{user.api_key}"
+              }.as_json
+      
+      post api_v1_roadtrip_path(headers: headers, params: body, as: :json)
+      result = JSON.parse(response.body)
+
+      expect(response.status).to eq(401)
+      expect(result).to eq("You're missing some parameters.")
+
     end
   end
 end
