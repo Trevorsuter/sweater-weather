@@ -89,7 +89,7 @@ RSpec testing suite is utilized for testing this application.
   - *all units of measurement are in imperial form*
 ***
 
-#### GET Background Data
+### GET Background Data
 `GET /api/v1/backgrounds?location={city,state}`
 
 - **Required** path params:
@@ -120,10 +120,10 @@ RSpec testing suite is utilized for testing this application.
   - *All images default to searching for pictures of that city's Downtown area*.
 ***
 
-#### POST User Data
+### POST User Data
 `POST api/v1/users`
 
-`request_body: {email: (email), password: (password), password_confirmation: (password confirmation)}`
+`request_body: {"email": "(email)", "password": "(password)", "password_confirmation": "(password confirmation)"}`
 
 - **NO PATH PARAMS ARE USED IN THIS ENDPOINT, all data must be passed through in the body of the request in JSON format shown above.**
 
@@ -151,7 +151,76 @@ RSpec testing suite is utilized for testing this application.
 - _**Notes about this endpoint:**_
   - *201 status code if creation is successful*
   - *401 status code with description if unsuccessful*
+***
 
+### Post User Login Data
+`POST /api/v1/sessions`
+
+`body: {"email": "(example@email.com)", "password": "(password)"}`
+
+- **NO PATH PARAMS ARE USED IN THIS ENDPOINT, all data must be passed through in the body of the request in JSON format shown above.**
+
+- **Required** in the body:
+  - `email`
+  - `password`
+
+`POST /api/v1/sessions`
+
+`body: {"email": "example@email.com", "password": "password123"}`
+>```JSON
+> {
+>  "data": {
+>    "id": "1",
+>    "type": "user",
+>    "attributes": {
+>      "email": "example@email.com",
+>      "api_key": "g46k7791m07za88140" 
+>    }
+>  }
+> }
+
+- _**Notes about this endpoint:**_
+  - *201 status code if creation is successful*
+  - *401 status code with description if unsuccessful*
+***
+
+### POST Roadtrip Data
+`POST /api/v1/roadtrip`
+
+`body: { "origin": "(origin location)", "destination": "(destination location)", "api_key": "(user api key)"`
+
+- **NO PATH PARAMS ARE USED IN THIS ENDPOINT, all data must be passed through in the body of the request in JSON format shown above.**
+
+- **Required** in the body:
+  - `origin`: *the starting location of the roadtrip*
+  - `destination`: *the ending location of the roadtrip*
+  - `api_key`: *the created user's api key, used to grant access*
+
+`POST /api/v1/roadtrip`
+
+`body: {"origin": "Denver,CO", "destination": "Boulder,CO", "api_key": "92868b0d3fe5bece35dfbd91fd7a881b"}`
+>```JSON
+>{
+>  "data": {
+>    "id": "null",
+>    "type": "roadtrip",
+>    "attributes": {
+>      "start_city": "Denver,CO",
+>      "end_city": "Boulder,CO",
+>      "travel_time": "00:35:23",
+>      "weather_at_eta": {
+>        "temperature": "45.7",
+>        "conditions": "overcast clouds"
+>        }
+>      }
+>  }
+>}
+
+- _**Notes about this endpoint:**_
+  - *401 status code with description if invalid route is given (ex. New York, NY -> London, UK)*
+  - *401 status code if any params are missing*
+  - *401 status code if API key is not found in the user database*
+  - *401 status code with description if locations gave an error in other areas*
 ***
 
 ## Built With
